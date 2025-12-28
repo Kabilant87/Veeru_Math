@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Symmetry World - Level 2</title>
+<style>
+    /* REQUESTED CHANGE: Light Blue Background */
+    body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #e3f2fd; color: #0d47a1; max-width: 800px; margin: 0 auto; padding: 20px; }
+    
+    h1 { text-align: center; color: #1565c0; text-shadow: 2px 2px #fff; font-size: 2.5em; }
+    p.subtitle { text-align: center; color: #0277bd; font-size: 1.2em; margin-bottom: 30px; }
+    
+    /* Concept Card */
+    .concept-card {
+        background: white; border: 4px solid #4fc3f7; border-radius: 20px;
+        padding: 20px; margin-bottom: 30px; text-align: center;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+
+    /* Question Cards */
+    .question-card { 
+        background: white; border-radius: 20px; padding: 25px; 
+        margin-bottom: 25px; border: 3px solid #b3e5fc;
+        transition: transform 0.2s;
+    }
+    .question-card:hover { border-color: #29b6f6; }
+    
+    .q-text { font-size: 1.5em; font-weight: bold; margin-bottom: 15px; color: #01579b; }
+    
+    /* Object Container for SVGs */
+    .object-container { 
+        height: 150px; display: flex; align-items: center; justify-content: center; 
+        margin-bottom: 15px; background: #e1f5fe; border-radius: 15px;
+        position: relative;
+    }
+
+    /* Dashed Line of Symmetry (Hidden by default, shown on click) */
+    .symmetry-line {
+        stroke: #d50000; stroke-width: 3; stroke-dasharray: 8,4; display: none;
+    }
+    .show-line .symmetry-line { display: block; }
+
+    /* Buttons */
+    .options { display: flex; gap: 20px; justify-content: center; margin-top: 10px; }
+    .btn { 
+        padding: 12px 30px; font-size: 1.3em; border: none; 
+        background: #81d4fa; color: #01579b; border-radius: 50px; cursor: pointer; 
+        font-family: 'Comic Sans MS', sans-serif; transition: 0.2s;
+        box-shadow: 0 4px 0 #4fc3f7;
+    }
+    .btn:active { transform: translateY(4px); box-shadow: none; }
+    .btn:hover { background: #4fc3f7; color: white; }
+    
+    /* Feedback */
+    .feedback { 
+        margin-top: 15px; font-size: 1.2em; font-weight: bold; 
+        text-align: center; display: none; padding: 10px; border-radius: 10px;
+    }
+    .correct { background: #c8e6c9; color: #1b5e20; border: 2px solid #2e7d32; }
+    .wrong { background: #ffcdd2; color: #b71c1c; border: 2px solid #c62828; }
+
+</style>
+</head>
+<body>
+
+<h1>🐞 Symmetry World</h1>
+<p class="subtitle">Look at the objects. Can you fold them perfectly?</p>
+
+<div class="concept-card">
+    <h2>Real World Objects</h2>
+    <p>Many things in nature are symmetrical. Look at this Ladybug!</p>
+    <div style="margin: 20px;">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="55" r="40" fill="#f44336" stroke="black" stroke-width="2"/>
+            <line x1="50" y1="15" x2="50" y2="95" stroke="black" stroke-width="2"/>
+            <circle cx="35" cy="45" r="5" fill="black"/> <circle cx="65" cy="45" r="5" fill="black"/>
+            <circle cx="30" cy="70" r="5" fill="black"/> <circle cx="70" cy="70" r="5" fill="black"/>
+            <path d="M30,25 Q50,5 70,25" fill="black" />
+            <line x1="50" y1="0" x2="50" y2="100" stroke="white" stroke-dasharray="4,4" stroke-width="2"/>
+        </svg>
+    </div>
+    <p><strong>Left side = Right side</strong></p>
+</div>
+
+<div class="question-card" id="card1">
+    <div class="q-text">1. Look at this Christmas Tree. Is it Symmetrical?</div>
+    <div class="object-container">
+        <svg width="150" height="150" viewBox="0 0 100 100">
+            <polygon points="50,10 20,60 40,60 10,90 90,90 60,60 80,60" fill="#4caf50" stroke="#1b5e20"/>
+            <rect x="45" y="90" width="10" height="10" fill="#795548"/>
+            <line class="symmetry-line" x1="50" y1="5" x2="50" y2="100" />
+        </svg>
+    </div>
+    <div class="options">
+        <button class="btn" onclick="checkAnswer('card1', true, 'Yes! If you fold the tree, the branches match.')">Yes</button>
+        <button class="btn" onclick="checkAnswer('card1', false, 'Look closely. The left branches match the right branches.')">No</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card" id="card2">
+    <div class="q-text">2. Look at this Lightning Bolt. Is it Symmetrical?</div>
+    <div class="object-container">
+        <svg width="150" height="150" viewBox="0 0 100 100">
+            <polygon points="40,5 60,5 30,50 55,50 25,95 45,95" fill="#ffeb3b" stroke="#fbc02d" stroke-width="2" transform="rotate(-10 50 50)"/>
+            <line class="symmetry-line" x1="50" y1="0" x2="50" y2="100" />
+        </svg>
+    </div>
+    <div class="options">
+        <button class="btn" onclick="checkAnswer('card2', false, 'Correct! It is crooked. The sides do not match.')">No</button>
+        <button class="btn" onclick="checkAnswer('card2', true, 'Try to fold it. One side zigs and the other zags!')">Yes</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card" id="card3">
+    <div class="q-text">3. Can you fold this House perfectly in half?</div>
+    <div class="object-container">
+        <svg width="150" height="150" viewBox="0 0 100 100">
+            <rect x="25" y="40" width="50" height="50" fill="#ffcc80" stroke="#e65100" stroke-width="2"/>
+            <polygon points="20,40 50,10 80,40" fill="#e65100" stroke="#e65100"/>
+            <rect x="42" y="65" width="16" height="25" fill="#8d6e63"/>
+            <circle cx="50" cy="52" r="6" fill="#b3e5fc" stroke="#0277bd"/>
+            <line class="symmetry-line" x1="50" y1="5" x2="50" y2="95" />
+        </svg>
+    </div>
+    <div class="options">
+        <button class="btn" onclick="checkAnswer('card3', true, 'Yes! The door and roof are right in the middle.')">Yes</button>
+        <button class="btn" onclick="checkAnswer('card3', false, 'Look at the roof. It is the same on both sides!')">No</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card" id="card4">
+    <div class="q-text">4. Does the letter 'A' have a line of symmetry?</div>
+    <div class="object-container">
+        <svg width="150" height="150" viewBox="0 0 100 100">
+            <text x="50" y="85" font-family="Arial" font-weight="bold" font-size="90" fill="#1565c0" text-anchor="middle">A</text>
+            <line class="symmetry-line" x1="50" y1="10" x2="50" y2="90" />
+        </svg>
+    </div>
+    <div class="options">
+        <button class="btn" onclick="checkAnswer('card4', true, 'Correct! You can fold A vertically (up and down).')">Yes</button>
+        <button class="btn" onclick="checkAnswer('card4', false, 'Try again. Draw a line down the middle!')">No</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card" id="card5">
+    <div class="q-text">5. Is this Teapot symmetrical?</div>
+    <div class="object-container">
+        <svg width="150" height="150" viewBox="0 0 100 100">
+            <circle cx="50" cy="60" r="30" fill="#ba68c8" stroke="black"/>
+            <path d="M22,50 Q10,40 15,30" stroke="black" stroke-width="4" fill="none"/>
+            <path d="M80,50 Q90,60 80,70" stroke="black" stroke-width="4" fill="none"/>
+            <line class="symmetry-line" x1="50" y1="20" x2="50" y2="100" />
+        </svg>
+    </div>
+    <p style="text-align:center; font-size:0.9em;">(Hint: Look at the handle and the spout!)</p>
+    <div class="options">
+        <button class="btn" onclick="checkAnswer('card5', false, 'Correct! One side has a spout, the other has a handle. They do not match.')">No</button>
+        <button class="btn" onclick="checkAnswer('card5', true, 'Look again! If you fold it, the spout would hit the handle.')">Yes</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<script>
+    function checkAnswer(cardId, isCorrect, msg) {
+        const card = document.getElementById(cardId);
+        const feedback = card.querySelector('.feedback');
+        const svg = card.querySelector('svg');
+        const btns = card.querySelectorAll('.btn');
+        
+        // Show the hidden symmetry line
+        svg.classList.add('show-line');
+        
+        // Disable buttons
+        btns.forEach(b => {
+            b.disabled = true;
+            b.style.opacity = "0.6";
+            b.style.cursor = "not-allowed";
+        });
+
+        // Show Feedback
+        feedback.style.display = "block";
+        feedback.innerText = msg;
+        
+        if(isCorrect) {
+            feedback.className = "feedback correct";
+        } else {
+            feedback.className = "feedback wrong";
+        }
+    }
+</script>
+
+</body>
+</html>

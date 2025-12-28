@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galactic Math Mission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #2b2d42;
+            --card-bg: #8d99ae;
+            --accent-purple: #8338ec;
+            --accent-yellow: #ffbe0b;
+            --accent-pink: #ff006e;
+            --accent-green: #3a86ff;
+            --text-color: #edf2f4;
+            --correct: #06d6a0;
+            --incorrect: #ef233c;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            background-image: radial-gradient(#ffffff 1px, transparent 1px), radial-gradient(#ffffff 1px, transparent 1px);
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
+            padding: 30px;
+            border-radius: 25px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            border: 4px solid var(--accent-yellow);
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            font-size: 3em;
+            margin: 0;
+            text-shadow: 2px 2px 0px #000;
+        }
+
+        p.subtitle {
+            font-size: 1.2em;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .section-title {
+            font-family: 'Fredoka One', cursive;
+            color: var(--accent-yellow);
+            font-size: 1.8em;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 0 #000;
+            background: rgba(0,0,0,0.3);
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 50px;
+        }
+
+        .question-card {
+            background-color: white;
+            color: #333;
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.2);
+            position: relative;
+            border: 3px solid transparent;
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: var(--bg-color);
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f4f8;
+            padding: 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            border: 3px solid #e0e7ff;
+            transition: all 0.2s;
+        }
+
+        .option-label:hover {
+            background-color: var(--accent-yellow);
+            border-color: var(--accent-yellow);
+            color: #333;
+        }
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        input[type="radio"]:checked + span {
+            /* Logic handled by class adding in JS, visual cue for selection */
+            position: relative;
+        }
+        
+        /* Visual selection state (before submit) */
+        .selected-option {
+            background-color: var(--accent-purple) !important;
+            color: white !important;
+            border-color: var(--accent-purple) !important;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to right, var(--accent-green), var(--accent-purple));
+            color: white;
+            font-family: 'Fredoka One', cursive;
+            font-size: 2em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 40px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 0 rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
+
+        .submit-btn:active {
+            transform: translateY(5px);
+            box-shadow: 0 5px 0 rgba(0,0,0,0.2);
+        }
+
+        /* Results Styling */
+        .correct {
+            background-color: var(--correct) !important;
+            color: white !important;
+            border-color: var(--correct) !important;
+        }
+
+        .wrong {
+            background-color: var(--incorrect) !important;
+            color: white !important;
+            border-color: var(--incorrect) !important;
+            opacity: 0.7;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 2em;
+            font-family: 'Fredoka One', cursive;
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            display: none; /* Hidden until submit */
+        }
+
+        .planet-icon {
+            font-size: 3em;
+            position: absolute;
+            top: -20px;
+            right: -10px;
+            filter: drop-shadow(2px 2px 0 rgba(0,0,0,0.2));
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🚀 Galactic Math Mission</h1>
+        <p class="subtitle">Put on your space helmet and solve these problems!</p>
+    </header>
+
+    <form id="mathExam">
+        
+        <div class="section-title">🌟 Rocket Power Math</div>
+        
+        <div class="question-card" data-correct="B">
+            <div class="planet-icon">🛸</div>
+            <div class="question-text">1. 45 + 23 = ?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q1" value="A"><span>67</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q1" value="B"><span>68</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q1" value="C"><span>58</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q1" value="D"><span>78</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">2. There were 50 stars. 20 stars disappeared. How many are left?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q2" value="A"><span>30</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q2" value="B"><span>70</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q2" value="C"><span>25</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q2" value="D"><span>40</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="C">
+            <div class="question-text">3. 12 + 8 + 5 = ?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q3" value="A"><span>20</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q3" value="B"><span>28</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q3" value="C"><span>25</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q3" value="D"><span>22</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="D">
+            <div class="question-text">4. What is 88 minus 10?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q4" value="A"><span>98</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q4" value="B"><span>80</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q4" value="C"><span>88</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q4" value="D"><span>78</span></label>
+            </div>
+        </div>
+
+        <div class="section-title">🔢 Alien Numbers</div>
+
+        <div class="question-card" data-correct="B">
+            <div class="planet-icon">👾</div>
+            <div class="question-text">5. Which number has a 6 in the Tens place?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q5" value="A"><span>26</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q5" value="B"><span>62</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q5" value="C"><span>16</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q5" value="D"><span>6</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">6. What number is: 3 Hundreds, 4 Tens, and 2 Ones?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q6" value="A"><span>342</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q6" value="B"><span>324</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q6" value="C"><span>432</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q6" value="D"><span>243</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="C">
+            <div class="question-text">7. Is 145 greater than (>) or less than (<) 154?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q7" value="A"><span>Greater (>)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q7" value="B"><span>Equal (=)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q7" value="C"><span>Less (<)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q7" value="D"><span>None</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">8. What is the value of the 5 in the number 53?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q8" value="A"><span>50</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q8" value="B"><span>5</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q8" value="C"><span>3</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q8" value="D"><span>500</span></label>
+            </div>
+        </div>
+
+        <div class="section-title">⏰ Space Time</div>
+
+        <div class="question-card" data-correct="B">
+            <div class="planet-icon">🪐</div>
+            <div class="question-text">9. The little hand is on the 3. The big hand is on the 12. What time is it?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q9" value="A"><span>12:30</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q9" value="B"><span>3:00</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q9" value="C"><span>3:12</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q9" value="D"><span>12:03</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="C">
+            <div class="question-text">10. Half past 4 is the same as...</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q10" value="A"><span>4:00</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q10" value="B"><span>5:30</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q10" value="C"><span>4:30</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q10" value="D"><span>3:30</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">11. How many minutes are in one hour?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q11" value="A"><span>60</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q11" value="B"><span>30</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q11" value="C"><span>100</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q11" value="D"><span>12</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="B">
+            <div class="question-text">12. We eat lunch at 12:00 PM. Is that morning, afternoon, or night?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q12" value="A"><span>Morning</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q12" value="B"><span>Afternoon</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q12" value="C"><span>Night</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q12" value="D"><span>Midnight</span></label>
+            </div>
+        </div>
+
+        <div class="section-title">💰 Space Coins</div>
+
+        <div class="question-card" data-correct="C">
+            <div class="planet-icon">🪙</div>
+            <div class="question-text">13. How much is a quarter worth?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q13" value="A"><span>1 cent</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q13" value="B"><span>10 cents</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q13" value="C"><span>25 cents</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q13" value="D"><span>5 cents</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="B">
+            <div class="question-text">14. You have 2 dimes and 1 penny. How much money do you have?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q14" value="A"><span>11 cents</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q14" value="B"><span>21 cents</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q14" value="C"><span>30 cents</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q14" value="D"><span>3 cents</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">15. A candy bar costs 50 cents. You have 40 cents. Do you have enough?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q15" value="A"><span>No</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q15" value="B"><span>Yes</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q15" value="C"><span>Maybe</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q15" value="D"><span>I have too much</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="D">
+            <div class="question-text">16. Which coin is the smallest but worth 10 cents?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q16" value="A"><span>Quarter</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q16" value="B"><span>Penny</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q16" value="C"><span>Nickel</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q16" value="D"><span>Dime</span></label>
+            </div>
+        </div>
+
+        <div class="section-title">📐 Geometry Galaxy</div>
+
+        <div class="question-card" data-correct="B">
+            <div class="planet-icon">🔺</div>
+            <div class="question-text">17. Which shape has 3 sides?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q17" value="A"><span>Square</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q17" value="B"><span>Triangle</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q17" value="C"><span>Circle</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q17" value="D"><span>Rectangle</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">18. A cube looks like a...</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q18" value="A"><span>Box</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q18" value="B"><span>Ball</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q18" value="C"><span>Can of soda</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q18" value="D"><span>Ice cream cone</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="C">
+            <div class="question-text">19. How many corners does a rectangle have?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q19" value="A"><span>3</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q19" value="B"><span>5</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q19" value="C"><span>4</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q19" value="D"><span>0</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">20. If you cut a circle in half, you get two...</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q20" value="A"><span>Semicircles</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q20" value="B"><span>Squares</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q20" value="C"><span>Triangles</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q20" value="D"><span>Stars</span></label>
+            </div>
+        </div>
+
+        <div class="section-title">📊 Star Charts</div>
+
+        <div class="question-card" data-correct="B">
+            <div class="planet-icon">📈</div>
+            <div class="question-text">21. 5 kids like Blue. 3 kids like Red. How many kids in total?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q21" value="A"><span>2</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q21" value="B"><span>8</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q21" value="C"><span>15</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q21" value="D"><span>5</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="A">
+            <div class="question-text">22. Look at a ruler. What do we measure with it?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q22" value="A"><span>Length (how long)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q22" value="B"><span>Weight (how heavy)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q22" value="C"><span>Time (how long)</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q22" value="D"><span>Temperature (how hot)</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="D">
+            <div class="question-text">23. Which number is an even number?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q23" value="A"><span>3</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q23" value="B"><span>7</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q23" value="C"><span>9</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q23" value="D"><span>4</span></label>
+            </div>
+        </div>
+
+        <div class="question-card" data-correct="B">
+            <div class="question-text">24. If today is Monday, what day is tomorrow?</div>
+            <div class="options-grid">
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q24" value="A"><span>Sunday</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q24" value="B"><span>Tuesday</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q24" value="C"><span>Wednesday</span></label>
+                <label class="option-label" onclick="selectOption(this)"><input type="radio" name="q24" value="D"><span>Friday</span></label>
+            </div>
+        </div>
+
+        <button type="button" class="submit-btn" onclick="checkAnswers()">BLAST OFF! (SUBMIT)</button>
+        
+        <div id="scoreDisplay" class="score-display"></div>
+
+    </form>
+</div>
+
+<script>
+    // Visual selection helper
+    function selectOption(label) {
+        // Remove selected class from siblings
+        const parent = label.parentElement;
+        const siblings = parent.querySelectorAll('.option-label');
+        siblings.forEach(sib => sib.classList.remove('selected-option'));
+        
+        // Add to clicked
+        label.classList.add('selected-option');
+        
+        // Check the radio input
+        const input = label.querySelector('input');
+        input.checked = true;
+    }
+
+    function checkAnswers() {
+        const questions = document.querySelectorAll('.question-card');
+        let score = 0;
+        let total = questions.length;
+
+        questions.forEach(card => {
+            const correctValue = card.getAttribute('data-correct');
+            const selectedInput = card.querySelector('input:checked');
+            const allLabels = card.querySelectorAll('.option-label');
+
+            // Reset styles first
+            allLabels.forEach(lbl => {
+                lbl.classList.remove('selected-option'); // Remove blue selection
+                lbl.classList.remove('correct', 'wrong');
+            });
+
+            if (selectedInput) {
+                const userVal = selectedInput.value;
+                const userLabel = selectedInput.parentElement;
+
+                if (userVal === correctValue) {
+                    score++;
+                    userLabel.classList.add('correct');
+                    userLabel.innerHTML += ' ✅';
+                } else {
+                    userLabel.classList.add('wrong');
+                    
+                    // Highlight correct one
+                    const correctLabel = card.querySelector(`input[value="${correctValue}"]`).parentElement;
+                    correctLabel.classList.add('correct');
+                    correctLabel.innerHTML += ' 👈';
+                }
+            } else {
+                // If they missed a question, just show the right answer
+                const correctLabel = card.querySelector(`input[value="${correctValue}"]`).parentElement;
+                correctLabel.classList.add('correct');
+                correctLabel.innerHTML += ' 👈';
+            }
+        });
+
+        const scoreDiv = document.getElementById('scoreDisplay');
+        scoreDiv.style.display = 'block';
+        scoreDiv.innerHTML = `🌟 Mission Report: ${score} / ${total} Correct! 🌟`;
+        
+        if(score === total) {
+             scoreDiv.innerHTML += "<br>PERFECT SCORE! YOU ARE A MATH ASTRONAUT! 👩‍🚀";
+        } else if (score > 18) {
+             scoreDiv.innerHTML += "<br>Great job, Space Cadet! 🚀";
+        } else {
+             scoreDiv.innerHTML += "<br>Keep training! You can do it! 🔧";
+        }
+        
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+</script>
+
+</body>
+</html>

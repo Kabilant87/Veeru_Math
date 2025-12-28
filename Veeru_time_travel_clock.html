@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veeru's Time Travel Adventure</title>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Fredoka+One&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --hour-color: #ff4757; /* Red for Hour */
+            --min-color: #1e90ff; /* Blue for Minute */
+            --bg-color: #f0f9ff;
+            --card-bg: #ffffff;
+            --accent: #ffa502;
+        }
+
+        body {
+            font-family: 'Comic Neue', cursive;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            font-size: 1.2rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+            margin-bottom: 40px;
+            border: 4px solid white;
+        }
+
+        h1 {
+            font-family: 'Fredoka One', cursive;
+            margin: 0;
+            font-size: 2.5em;
+            letter-spacing: 1px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            border-left: 10px solid var(--accent);
+        }
+
+        .highlight-hour { color: var(--hour-color); font-weight: bold; }
+        .highlight-min { color: var(--min-color); font-weight: bold; }
+
+        /* Clock SVG Styles */
+        .clock-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        svg {
+            filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.1));
+        }
+
+        .clock-face { fill: white; stroke: #333; stroke-width: 3; }
+        .hour-hand { stroke: var(--hour-color); stroke-width: 8; stroke-linecap: round; }
+        .min-hand { stroke: var(--min-color); stroke-width: 5; stroke-linecap: round; }
+        .center-dot { fill: #333; }
+        .clock-number { font-family: 'Fredoka One', cursive; fill: #333; font-size: 18px; text-anchor: middle; dominant-baseline: middle; }
+        .minute-ticks { stroke: #ddd; stroke-width: 2; }
+        
+        .rule-box {
+            background-color: #fff3cd;
+            border: 2px dashed #ffc107;
+            padding: 15px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        .toggle-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            font-family: 'Fredoka One', cursive;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: transform 0.1s;
+        }
+        
+        .toggle-btn:active { transform: scale(0.95); }
+
+        .hidden-answer {
+            display: none;
+            margin-top: 15px;
+            font-size: 1.5em;
+            color: #2ed573;
+            font-family: 'Fredoka One', cursive;
+            animation: popIn 0.3s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .flex-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>⏳ Time Traveler Veeru!</h1>
+        <p>Let's master the clock to fix the time machine.</p>
+    </header>
+
+    <div class="card" style="border-left-color: var(--hour-color);">
+        <h2>Step 1: Meet the Team</h2>
+        <p>Veeru, a clock has two main workers. We use colors to tell them apart:</p>
+        
+        <div class="flex-row">
+            <div style="text-align: center; width: 45%;">
+                <h3 class="highlight-hour">The Short RED Hand</h3>
+                <p>He is the <strong>BOSS</strong>.</p>
+                <p>He is <strong>SLOW</strong>.</p>
+                <p>He tells us the <strong>HOUR</strong>.</p>
+            </div>
+            <div style="text-align: center; width: 45%;">
+                <h3 class="highlight-min">The Long BLUE Hand</h3>
+                <p>He is the <strong>HELPER</strong>.</p>
+                <p>He is <strong>FAST</strong>.</p>
+                <p>He tells us the <strong>MINUTES</strong>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="border-left-color: var(--accent);">
+        <h2>Step 2: The "Room" Rule (Very Important!)</h2>
+        <p>This is where it gets tricky, Veeru! The <span class="highlight-hour">Hour Hand</span> is always moving, but very slowly.</p>
+        
+        <div class="rule-box">
+            🏠 THE RULE: <br>
+            A number owns the "Room" <em>after</em> it, until the next number starts.
+        </div>
+
+        <p>Imagine the space between <strong>4</strong> and <strong>5</strong> is "4's Room". Even if the hand is almost touching the 5, if it hasn't passed it yet, it is still <strong>4</strong>!</p>
+        
+        <div class="clock-container">
+            <svg width="200" height="200" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" fill="#eee" stroke="#333" stroke-width="2"/>
+                <path d="M100,100 L186,150 A90,90 0 0,0 145,177 Z" fill="rgba(255, 71, 87, 0.2)" transform="rotate(-30 100 100)"/>
+                
+                <text x="100" y="35" class="clock-number">12</text>
+                <text x="170" y="105" class="clock-number">3</text>
+                <text x="100" y="175" class="clock-number">6</text>
+                <text x="30" y="105" class="clock-number">9</text>
+                
+                <text x="155" y="155" class="clock-number" style="font-size: 24px; fill: var(--hour-color)">4</text>
+                <text x="125" y="180" class="clock-number">5</text>
+
+                <line x1="100" y1="100" x2="135" y2="135" class="hour-hand" />
+                <circle cx="100" cy="100" r="5" class="center-dot"/>
+            </svg>
+        </div>
+        <p style="text-align: center;">Look above! The <span class="highlight-hour">Red Hand</span> is past the 4. It hasn't hit the 5 yet. So the hour is <strong>4</strong>.</p>
+    </div>
+
+    <div class="card" style="border-left-color: var(--min-color);">
+        <h2>Step 3: The Secret Code of Minutes</h2>
+        <p>The numbers on the clock (1, 2, 3...) are for the Hour hand. The <span class="highlight-min">Blue Minute Hand</span> uses a secret code!</p>
+        <p>The code is: <strong>Count by 5s!</strong> 🐸 (Like a frog hopping)</p>
+        
+        <div class="clock-container">
+            <svg width="250" height="250" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" class="clock-face"/>
+                
+                <g style="font-size: 10px; font-weight: bold; fill: var(--min-color);">
+                    <text x="100" y="15">00</text>
+                    <text x="145" y="28">05</text>
+                    <text x="175" y="60">10</text>
+                    <text x="185" y="105">15</text>
+                    <text x="175" y="145">20</text>
+                    <text x="145" y="178">25</text>
+                    <text x="100" y="190">30</text>
+                    <text x="55" y="178">35</text>
+                    <text x="25" y="145">40</text>
+                    <text x="15" y="105">45</text>
+                    <text x="25" y="60">50</text>
+                    <text x="55" y="28">55</text>
+                </g>
+
+                <text x="100" y="35" class="clock-number">12</text>
+                <text x="170" y="105" class="clock-number">3</text>
+                <text x="100" y="175" class="clock-number">6</text>
+                <text x="30" y="105" class="clock-number">9</text>
+                
+                <line x1="100" y1="100" x2="160" y2="60" class="min-hand" />
+                <circle cx="100" cy="100" r="5" class="center-dot"/>
+            </svg>
+        </div>
+        <ul>
+            <li>If Blue points to <strong>1</strong>, say <strong>5</strong>.</li>
+            <li>If Blue points to <strong>2</strong>, say <strong>10</strong>.</li>
+            <li>If Blue points to <strong>6</strong>, say <strong>30</strong>.</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 50px; margin-bottom: 20px;">
+        <h2 style="font-family: 'Fredoka One'; font-size: 2em; color: #6c5ce7;">🚀 Veeru's Mission: What time is it?</h2>
+        <p>Look at the clocks. Say the answer out loud, then click the button!</p>
+    </div>
+
+    <div class="flex-row">
+        
+        <div class="card" style="width: 250px; text-align: center;">
+            <h3>Clock #1</h3>
+            <svg width="150" height="150" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" class="clock-face"/>
+                <line x1="100" y1="100" x2="160" y2="100" class="hour-hand" /> <line x1="100" y1="100" x2="100" y2="20" class="min-hand" /> <text x="100" y="35" class="clock-number">12</text>
+                <text x="170" y="105" class="clock-number">3</text>
+                <text x="100" y="175" class="clock-number">6</text>
+                <text x="30" y="105" class="clock-number">9</text>
+                <circle cx="100" cy="100" r="5" class="center-dot"/>
+            </svg>
+            <br>
+            <button class="toggle-btn" onclick="toggleAns('ans1')">Check Answer</button>
+            <div id="ans1" class="hidden-answer">3:00<br><span style="font-size:0.6em; color:gray">3 O'clock</span></div>
+        </div>
+
+        <div class="card" style="width: 250px; text-align: center;">
+            <h3>Clock #2</h3>
+            <svg width="150" height="150" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" class="clock-face"/>
+                <line x1="100" y1="100" x2="135" y2="135" class="hour-hand" /> 
+                <line x1="100" y1="100" x2="100" y2="180" class="min-hand" /> <text x="100" y="35" class="clock-number">12</text>
+                <text x="170" y="105" class="clock-number">3</text>
+                <text x="100" y="175" class="clock-number">6</text>
+                <text x="30" y="105" class="clock-number">9</text>
+                <text x="155" y="155" class="clock-number">4</text>
+                <circle cx="100" cy="100" r="5" class="center-dot"/>
+            </svg>
+            <br>
+            <button class="toggle-btn" onclick="toggleAns('ans2')">Check Answer</button>
+            <div id="ans2" class="hidden-answer">4:30<br><span style="font-size:0.6em; color:gray">Half past 4</span></div>
+        </div>
+
+        <div class="card" style="width: 250px; text-align: center;">
+            <h3>Clock #3 (Tricky!)</h3>
+            <svg width="150" height="150" viewBox="0 0 200 200">
+                <circle cx="100" cy="100" r="90" class="clock-face"/>
+                <line x1="100" y1="100" x2="105" y2="160" class="hour-hand" /> <line x1="100" y1="100" x2="170" y2="100" class="min-hand" /> <text x="100" y="35" class="clock-number">12</text>
+                <text x="170" y="105" class="clock-number">3</text>
+                <text x="100" y="175" class="clock-number">6</text>
+                <text x="30" y="105" class="clock-number">9</text>
+                <circle cx="100" cy="100" r="5" class="center-dot"/>
+            </svg>
+            <br>
+            <button class="toggle-btn" onclick="toggleAns('ans3')">Check Answer</button>
+            <div id="ans3" class="hidden-answer">6:15<br><span style="font-size:0.6em; color:gray">Quarter past 6</span></div>
+        </div>
+        
+    </div>
+
+</div>
+
+<script>
+    function toggleAns(id) {
+        var x = document.getElementById(id);
+        if (x.style.display === "block") {
+            x.style.display = "none";
+        } else {
+            x.style.display = "block";
+        }
+    }
+</script>
+
+</body>
+</html>

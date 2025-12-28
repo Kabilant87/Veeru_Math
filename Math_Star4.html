@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veeru's FAST Math - Set 4</title>
+<style>
+    /* Light Blue Theme */
+    body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #e3f2fd; color: #0d47a1; max-width: 850px; margin: 0 auto; padding: 20px; }
+    
+    h1 { text-align: center; color: #1565c0; text-shadow: 2px 2px #fff; font-size: 2.5em; margin-bottom: 5px; }
+    p.subtitle { text-align: center; color: #0277bd; font-size: 1.2em; margin-bottom: 40px; }
+    
+    .topic-section { 
+        background: white; 
+        border-radius: 20px; 
+        padding: 25px; 
+        margin-bottom: 40px; 
+        border: 3px solid #64b5f6; 
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05); 
+        position: relative; 
+    }
+    
+    .topic-badge { 
+        position: absolute; top: -20px; left: 20px; 
+        background-color: #ff9800; color: white; 
+        padding: 8px 20px; border-radius: 20px; 
+        font-weight: bold; font-size: 1.2em; 
+        border: 2px solid #ef6c00;
+        box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    }
+    
+    .question-card { margin-top: 25px; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px dashed #bbdefb; }
+    .question-card:last-child { border-bottom: none; }
+    
+    .question-text { font-size: 1.3em; margin-bottom: 15px; font-weight: bold; color: #01579b; }
+    
+    /* Visuals */
+    .visual-box { 
+        background: #f1f8e9; 
+        padding: 15px; 
+        border-radius: 15px; 
+        display: inline-block; 
+        border: 2px solid #c5e1a5;
+        margin-bottom: 15px;
+    }
+    .array-grid { display: grid; gap: 10px; justify-content: center; }
+    
+    /* Custom Emoji Items */
+    .item-sun { font-size: 26px; line-height: 1; }
+    .item-diamond { font-size: 26px; line-height: 1; color: #2196f3; }
+
+    /* SVG Clock Styling */
+    svg.clock { background: white; border-radius: 50%; border: 5px solid #0d47a1; box-shadow: 3px 3px 8px rgba(0,0,0,0.1); }
+    text.clock-num { font-size: 14px; font-family: Arial, sans-serif; font-weight: bold; text-anchor: middle; dominant-baseline: middle; fill: #333; }
+    
+    /* Options Styling */
+    .options-container { display: flex; flex-direction: column; gap: 12px; }
+    .option-label {
+        display: flex; align-items: center;
+        background-color: #fff; border: 2px solid #90caf9;
+        padding: 12px 15px; border-radius: 12px;
+        cursor: pointer; transition: transform 0.1s, background 0.2s; 
+        font-size: 1.1em;
+    }
+    .option-label:hover { background-color: #e1f5fe; border-color: #4fc3f7; transform: translateX(5px); }
+    input[type="radio"] { margin-right: 15px; transform: scale(1.6); accent-color: #0288d1; cursor: pointer; }
+    
+    /* Feedback Colors */
+    .correct-answer { background-color: #c8e6c9 !important; border-color: #2e7d32 !important; color: #1b5e20; }
+    .wrong-answer { background-color: #ffcdd2 !important; border-color: #c62828 !important; color: #b71c1c; opacity: 0.8; }
+
+    /* Submit Button */
+    .submit-area { text-align: center; margin: 50px 0; }
+    .submit-btn { 
+        background: linear-gradient(to bottom, #29b6f6, #0288d1); color: white; 
+        border: none; padding: 18px 50px; font-size: 1.6em; border-radius: 50px; 
+        cursor: pointer; box-shadow: 0 5px 0 #01579b; transition: all 0.1s;
+        font-family: 'Comic Sans MS', sans-serif; font-weight: bold;
+    }
+    .submit-btn:active { transform: translateY(5px); box-shadow: none; }
+    
+    .score-board { display: none; text-align: center; font-size: 2em; margin-top: 20px; padding: 30px; background: white; border-radius: 20px; border: 5px solid #00c853; color: #00c853; }
+
+</style>
+</head>
+<body>
+
+<h1>🦁 Veeru's FAST Math - Set 4</h1>
+<p class="subtitle">New questions! Good luck!</p>
+
+<form id="quizForm">
+
+<div class="topic-section">
+    <div class="topic-badge">1. Arrays & Adding</div>
+
+    <div class="question-card">
+        <div class="question-text">1. Look at these suns. Which addition sentence matches?</div>
+        <div class="visual-box">
+            <div class="array-grid" style="grid-template-columns: repeat(4, 1fr);">
+                <div class="item-sun">☀️</div><div class="item-sun">☀️</div><div class="item-sun">☀️</div><div class="item-sun">☀️</div>
+                <div class="item-sun">☀️</div><div class="item-sun">☀️</div><div class="item-sun">☀️</div><div class="item-sun">☀️</div>
+            </div>
+        </div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q1" value="A"> 4 + 4</label>
+            <label class="option-label"><input type="radio" name="q1" value="B"> 2 + 4</label>
+            <label class="option-label"><input type="radio" name="q1" value="C"> 2 + 2 + 2</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">2. Which array matches "3 + 3 + 3"?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q2" value="A"> 2 rows of 3</label>
+            <label class="option-label"><input type="radio" name="q2" value="B"> 3 rows of 3</label>
+            <label class="option-label"><input type="radio" name="q2" value="C"> 3 rows of 4</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">3. How many diamonds are there in total?</div>
+        <div class="visual-box">
+            <div class="array-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="item-diamond">💎</div><div class="item-diamond">💎</div>
+                <div class="item-diamond">💎</div><div class="item-diamond">💎</div>
+                <div class="item-diamond">💎</div><div class="item-diamond">💎</div>
+            </div>
+        </div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q3" value="A"> 5</label>
+            <label class="option-label"><input type="radio" name="q3" value="B"> 6</label>
+            <label class="option-label"><input type="radio" name="q3" value="C"> 8</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">4. Veeru has 5 packs of gum. Each pack has 2 pieces. How many pieces?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q4" value="A"> 7</label>
+            <label class="option-label"><input type="radio" name="q4" value="B"> 10</label>
+            <label class="option-label"><input type="radio" name="q4" value="C"> 12</label>
+        </div>
+    </div>
+</div>
+
+<div class="topic-section">
+    <div class="topic-badge">2. Rounding (Nearest 10)</div>
+
+    <div class="question-card">
+        <div class="question-text">5. Round 12 to the nearest 10.</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q5" value="A"> 10</label>
+            <label class="option-label"><input type="radio" name="q5" value="B"> 20</label>
+            <label class="option-label"><input type="radio" name="q5" value="C"> 15</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">6. Which number rounds up to 60?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q6" value="A"> 52</label>
+            <label class="option-label"><input type="radio" name="q6" value="B"> 54</label>
+            <label class="option-label"><input type="radio" name="q6" value="C"> 58</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">7. Round 75 to the nearest 10. (Remember the rule for 5!)</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q7" value="A"> 70</label>
+            <label class="option-label"><input type="radio" name="q7" value="B"> 80</label>
+            <label class="option-label"><input type="radio" name="q7" value="C"> 75</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">8. Is 44 closer to 40 or 50?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q8" value="A"> 40</label>
+            <label class="option-label"><input type="radio" name="q8" value="B"> 50</label>
+        </div>
+    </div>
+</div>
+
+<div class="topic-section">
+    <div class="topic-badge">3. Telling Time</div>
+
+    <div class="question-card">
+        <div class="question-text">9. What time does this clock show?</div>
+        <svg width="150" height="150" viewBox="0 0 100 100" class="clock">
+            <text x="50" y="14" class="clock-num">12</text><text x="70" y="20" class="clock-num">1</text>
+            <text x="83" y="34" class="clock-num">2</text><text x="88" y="53" class="clock-num">3</text>
+            <text x="83" y="72" class="clock-num">4</text><text x="70" y="86" class="clock-num">5</text>
+            <text x="50" y="91" class="clock-num">6</text><text x="30" y="86" class="clock-num">7</text>
+            <text x="17" y="72" class="clock-num">8</text><text x="12" y="53" class="clock-num">9</text>
+            <text x="17" y="34" class="clock-num">10</text><text x="30" y="20" class="clock-num">11</text>
+            <line x1="50" y1="50" x2="50" y2="80" stroke="#333" stroke-width="3" stroke-linecap="round" /> <line x1="50" y1="50" x2="30" y2="40" stroke="#333" stroke-width="4" stroke-linecap="round" /> <circle cx="50" cy="50" r="4" fill="#1565c0" />
+        </svg>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q9" value="A"> 10:00</label>
+            <label class="option-label"><input type="radio" name="q9" value="B"> 10:30</label>
+            <label class="option-label"><input type="radio" name="q9" value="C"> 11:30</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">10. Identify the time.</div>
+        <svg width="150" height="150" viewBox="0 0 100 100" class="clock">
+             <text x="50" y="14" class="clock-num">12</text><text x="70" y="20" class="clock-num">1</text>
+             <text x="83" y="34" class="clock-num">2</text><text x="88" y="53" class="clock-num">3</text>
+             <text x="83" y="72" class="clock-num">4</text><text x="70" y="86" class="clock-num">5</text>
+             <text x="50" y="91" class="clock-num">6</text><text x="30" y="86" class="clock-num">7</text>
+             <text x="17" y="72" class="clock-num">8</text><text x="12" y="53" class="clock-num">9</text>
+             <text x="17" y="34" class="clock-num">10</text><text x="30" y="20" class="clock-num">11</text>
+             <line x1="50" y1="50" x2="80" y2="50" stroke="#333" stroke-width="3" stroke-linecap="round" /> <line x1="50" y1="50" x2="50" y2="75" stroke="#333" stroke-width="4" stroke-linecap="round" /> <circle cx="50" cy="50" r="4" fill="#1565c0" />
+        </svg>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q10" value="A"> 6:15</label>
+            <label class="option-label"><input type="radio" name="q10" value="B"> 3:30</label>
+            <label class="option-label"><input type="radio" name="q10" value="C"> 6:03</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">11. What time is "Quarter to 9"?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q11" value="A"> 9:15</label>
+            <label class="option-label"><input type="radio" name="q11" value="B"> 8:45</label>
+            <label class="option-label"><input type="radio" name="q11" value="C"> 9:45</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">12. If the minute hand is on the 11, how many minutes have passed?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q12" value="A"> 11 minutes</label>
+            <label class="option-label"><input type="radio" name="q12" value="B"> 55 minutes</label>
+            <label class="option-label"><input type="radio" name="q12" value="C"> 50 minutes</label>
+        </div>
+    </div>
+</div>
+
+<div class="topic-section">
+    <div class="topic-badge">4. Fractions</div>
+
+    <div class="question-card">
+        <div class="question-text">13. Which shape is cut into "Halves"?</div>
+        <div style="display: flex; gap: 20px; align-items: center; justify-content: center; margin-bottom: 10px;">
+            <div style="text-align: center;">
+                <svg width="80" height="80" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="80" fill="white" stroke="black" stroke-width="2"/>
+                    <line x1="50" y1="10" x2="50" y2="90" stroke="black" stroke-width="2"/>
+                </svg>
+                <br><b>A</b>
+            </div>
+            <div style="text-align: center;">
+                <svg width="80" height="80" viewBox="0 0 100 100">
+                    <rect x="10" y="10" width="80" height="80" fill="white" stroke="black" stroke-width="2"/>
+                    <line x1="30" y1="10" x2="30" y2="90" stroke="black" stroke-width="2"/>
+                    <line x1="60" y1="10" x2="60" y2="90" stroke="black" stroke-width="2"/>
+                </svg>
+                <br><b>B</b>
+            </div>
+        </div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q13" value="A"> Shape A</label>
+            <label class="option-label"><input type="radio" name="q13" value="B"> Shape B</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">14. What does "One Fourth" mean?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q14" value="A"> 1 part out of 3</label>
+            <label class="option-label"><input type="radio" name="q14" value="B"> 1 part out of 4 equal parts</label>
+            <label class="option-label"><input type="radio" name="q14" value="C"> 4 parts out of 1</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">15. Which pizza shows "Three Fourths"?</div>
+        <svg width="100" height="100" viewBox="0 0 100 100" style="margin: 10px auto; display:block;">
+            <circle cx="50" cy="50" r="40" fill="white" stroke="black"/>
+            <path d="M50,50 L50,10 A40,40 0 1,1 10,50 z" fill="#ffcc80" /> <line x1="50" y1="10" x2="50" y2="90" stroke="black"/>
+            <line x1="10" y1="50" x2="90" y2="50" stroke="black"/>
+        </svg>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q15" value="A"> This one!</label>
+            <label class="option-label"><input type="radio" name="q15" value="B"> No, this is One Fourth.</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">16. If I eat 2 halves of a cookie, how much did I eat?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q16" value="A"> Half a cookie</label>
+            <label class="option-label"><input type="radio" name="q16" value="B"> The whole cookie</label>
+            <label class="option-label"><input type="radio" name="q16" value="C"> Two cookies</label>
+        </div>
+    </div>
+</div>
+
+<div class="topic-section">
+    <div class="topic-badge">5. Symmetry</div>
+
+    <div class="question-card">
+        <div class="question-text">17. Look at this T-Shirt. Is it symmetrical?</div>
+        <svg width="100" height="80" viewBox="0 0 100 80" style="margin: 10px 0;">
+             <path d="M30,10 L10,30 L20,40 L30,30 L30,70 L70,70 L70,30 L80,40 L90,30 L70,10 Z" fill="#b3e5fc" stroke="blue"/>
+             <line x1="50" y1="10" x2="50" y2="70" stroke="red" stroke-width="2" stroke-dasharray="5,5"/>
+        </svg>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q17" value="A"> Yes</label>
+            <label class="option-label"><input type="radio" name="q17" value="B"> No</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">18. Which letter is symmetrical?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q18" value="A"> G</label>
+            <label class="option-label"><input type="radio" name="q18" value="B"> T</label>
+            <label class="option-label"><input type="radio" name="q18" value="C"> P</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">19. If you cut a circle perfectly down the middle, are the sides the same?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q19" value="A"> Yes, always.</label>
+            <label class="option-label"><input type="radio" name="q19" value="B"> No, never.</label>
+        </div>
+    </div>
+
+    <div class="question-card">
+        <div class="question-text">20. Which shape is NOT symmetrical?</div>
+        <div class="options-container">
+            <label class="option-label"><input type="radio" name="q20" value="A"> A square</label>
+            <label class="option-label"><input type="radio" name="q20" value="B"> A rectangle</label>
+            <label class="option-label"><input type="radio" name="q20" value="C"> A jagged rock</label>
+        </div>
+    </div>
+</div>
+
+<div class="submit-area">
+    <button type="button" class="submit-btn" onclick="submitQuiz()">Submit Test 🚀</button>
+</div>
+
+<div class="score-board" id="finalScore"></div>
+
+</form>
+
+<script>
+    const correctAnswers = {
+        q1: 'A', q2: 'B', q3: 'B', q4: 'B', 
+        q5: 'A', q6: 'C', q7: 'B', q8: 'A',
+        q9: 'B', q10: 'A', q11: 'B', q12: 'B',
+        q13: 'A', q14: 'B', q15: 'A', q16: 'B',
+        q17: 'A', q18: 'B', q19: 'A', q20: 'C'
+    };
+
+    function submitQuiz() {
+        let score = 0;
+        let total = Object.keys(correctAnswers).length;
+        
+        for (let q in correctAnswers) {
+            let correctValue = correctAnswers[q];
+            let radios = document.getElementsByName(q);
+            
+            // Highlight answers
+            for (let radio of radios) {
+                let label = radio.parentElement;
+                radio.disabled = true; // Lock the answer
+
+                if (radio.value === correctValue) {
+                    label.classList.add('correct-answer');
+                    if (!label.innerText.includes('✅')) label.innerHTML += ' ✅';
+                }
+
+                if (radio.checked) {
+                    if (radio.value === correctValue) {
+                        score++;
+                    } else {
+                        label.classList.add('wrong-answer');
+                        if (!label.innerText.includes('❌')) label.innerHTML += ' ❌';
+                    }
+                }
+            }
+        }
+
+        let scoreDiv = document.getElementById('finalScore');
+        scoreDiv.style.display = 'block';
+        
+        let message = "";
+        if(score === total) message = "🎉 INCREDIBLE! YOU GOT 100%! 🎉";
+        else if(score >= 15) message = "🌟 Great job! You are a Math Super Star! 🌟";
+        else message = "👍 Good practice! Keep trying!";
+
+        scoreDiv.innerHTML = `You scored ${score} out of ${total}<br><br>${message}`;
+        scoreDiv.scrollIntoView({behavior: "smooth"});
+        
+        document.querySelector('.submit-btn').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
