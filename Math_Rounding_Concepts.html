@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veeru's Rounding Rollercoaster</title>
+<style>
+    body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #e0f7fa; color: #006064; max-width: 800px; margin: 0 auto; padding: 20px; }
+    h1 { text-align: center; color: #0097a7; text-shadow: 2px 2px #fff; }
+    
+    /* The Reference Hill */
+    .concept-card {
+        background: white; border: 4px solid #00bcd4; border-radius: 20px;
+        padding: 20px; margin-bottom: 30px; text-align: center;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    }
+    .hill-container { position: relative; width: 100%; max-width: 500px; margin: 0 auto; }
+    
+    /* Question Cards */
+    .question-card { 
+        background: white; border-radius: 15px; padding: 25px; 
+        margin-bottom: 25px; border-bottom: 4px solid #b2ebf2; 
+    }
+    .q-text { font-size: 1.5em; font-weight: bold; margin-bottom: 15px; }
+    
+    /* Visual Number Line */
+    .number-line { position: relative; margin: 30px 10px; height: 50px; border-bottom: 4px solid #333; }
+    .tick { position: absolute; bottom: 0; width: 2px; height: 15px; background: #333; }
+    .tick-label { position: absolute; bottom: -25px; transform: translateX(-50%); font-weight: bold; }
+    .car-marker { 
+        position: absolute; bottom: 5px; width: 30px; height: 30px; 
+        background: #ff5252; border-radius: 50%; transform: translateX(-50%);
+        border: 2px solid #b71c1c; box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    /* Buttons */
+    .options { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+    .btn { 
+        padding: 15px 30px; font-size: 1.3em; border: 2px solid #0097a7; 
+        background: white; border-radius: 50px; cursor: pointer; 
+        font-family: 'Comic Sans MS', sans-serif; transition: 0.2s;
+        min-width: 100px;
+    }
+    .btn:hover { background: #e0f7fa; transform: scale(1.05); }
+    
+    .correct { background: #c8e6c9 !important; border-color: #2e7d32 !important; color: #1b5e20; }
+    .wrong { background: #ffcdd2 !important; border-color: #c62828 !important; color: #b71c1c; }
+    
+    .feedback { 
+        margin-top: 15px; font-size: 1.2em; font-weight: bold; 
+        text-align: center; display: none; padding: 10px; border-radius: 10px;
+    }
+
+</style>
+</head>
+<body>
+
+<h1>🎢 Rounding Rollercoaster</h1>
+
+<div class="concept-card">
+    <h2>The Rules</h2>
+    <svg viewBox="0 0 400 200" width="100%">
+        <path d="M20,180 Q200,-50 380,180" fill="none" stroke="#0097a7" stroke-width="5" />
+        
+        <circle cx="60" cy="140" r="15" fill="#ef5350" /> <text x="60" y="145" text-anchor="middle" fill="white" font-weight="bold">1</text>
+        <circle cx="90" cy="110" r="15" fill="#ef5350" /> <text x="90" y="115" text-anchor="middle" fill="white" font-weight="bold">2</text>
+        <circle cx="125" cy="85" r="15" fill="#ef5350" /> <text x="125" y="90" text-anchor="middle" fill="white" font-weight="bold">3</text>
+        <circle cx="160" cy="70" r="15" fill="#ef5350" /> <text x="160" y="75" text-anchor="middle" fill="white" font-weight="bold">4</text>
+        
+        <circle cx="240" cy="70" r="15" fill="#66bb6a" /> <text x="240" y="75" text-anchor="middle" fill="white" font-weight="bold">5</text>
+        <circle cx="275" cy="85" r="15" fill="#66bb6a" /> <text x="275" y="90" text-anchor="middle" fill="white" font-weight="bold">6</text>
+        <circle cx="310" cy="110" r="15" fill="#66bb6a" /> <text x="310" y="115" text-anchor="middle" fill="white" font-weight="bold">7</text>
+        <circle cx="340" cy="140" r="15" fill="#66bb6a" /> <text x="340" y="145" text-anchor="middle" fill="white" font-weight="bold">8</text>
+        
+        <text x="80" y="180" fill="#c62828" font-size="14" font-weight="bold">← BACK (Stay)</text>
+        <text x="280" y="180" fill="#2e7d32" font-size="14" font-weight="bold">NEXT 10 (Go Up) →</text>
+    </svg>
+    <p><strong>0-4:</strong> Slide Back! &nbsp;|&nbsp; <strong>5-9:</strong> Zoom Forward!</p>
+</div>
+
+<div class="question-card">
+    <div class="q-text">1. Round <span style="color:#d81b60; font-size:1.2em;">32</span> to the nearest 10.</div>
+    <div class="number-line">
+        <div class="tick" style="left:0%"></div><div class="tick-label" style="left:0%">30</div>
+        <div class="tick" style="left:100%"></div><div class="tick-label" style="left:100%">40</div>
+        <div class="car-marker" style="left:20%"></div>
+        <div class="tick-label" style="left:20%; bottom: 10px; color:red;">32</div>
+    </div>
+    <p style="text-align:center;">Is 32 closer to 30 or 40?</p>
+    <div class="options">
+        <button class="btn" onclick="check(this, true, 'Right! 2 is a weak number, so we slide back to 30.')">30</button>
+        <button class="btn" onclick="check(this, false, 'Look at the red dot. It is much closer to 30!')">40</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">2. Round <span style="color:#d81b60; font-size:1.2em;">67</span> to the nearest 10.</div>
+    <p style="text-align:center;">Think about the number 7. Does it climb the vine?</p>
+    <div class="options">
+        <button class="btn" onclick="check(this, false, 'Oops! 67 is past the middle (65). It goes up!')">60</button>
+        <button class="btn" onclick="check(this, true, 'Correct! 7 is a strong number. We go up to 70.')">70</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">3. Round <span style="color:#d81b60; font-size:1.2em;">15</span> to the nearest 10.</div>
+    <div class="number-line">
+        <div class="tick" style="left:0%"></div><div class="tick-label" style="left:0%">10</div>
+        <div class="tick" style="left:100%"></div><div class="tick-label" style="left:100%">20</div>
+        <div class="car-marker" style="left:50%; background:#66bb6a;"></div>
+        <div class="tick-label" style="left:50%; bottom: 10px; color:green;">15</div>
+    </div>
+    <p style="text-align:center;">The car is exactly at the top (5)! Which way does it go?</p>
+    <div class="options">
+        <button class="btn" onclick="check(this, false, 'Remember: 5 is strong! It zooms forward.')">10</button>
+        <button class="btn" onclick="check(this, true, 'Yes! 5 and up always go to the NEXT ten.')">20</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">4. Round <span style="color:#d81b60; font-size:1.2em;">84</span> to the nearest 10.</div>
+    <p style="text-align:center;">Look at the digit 4. Does it roll back or go forward?</p>
+    <div class="options">
+        <button class="btn" onclick="check(this, true, 'Excellent! 4 is weak. Stay at 80.')">80</button>
+        <button class="btn" onclick="check(this, false, 'Not quite. 4 doesnt have enough gas to get to 90.')">90</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">5. Round <span style="color:#d81b60; font-size:1.2em;">8</span> to the nearest 10.</div>
+    <p style="text-align:center;">Is 8 closer to 0 or 10?</p>
+    <div class="options">
+        <button class="btn" onclick="check(this, false, '8 is way too far from 0.')">0</button>
+        <button class="btn" onclick="check(this, true, 'Good job! 8 is very close to 10.')">10</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<script>
+    function check(btn, isCorrect, msg) {
+        let parent = btn.parentElement;
+        let feedback = parent.nextElementSibling;
+        let allBtns = parent.getElementsByClassName('btn');
+        
+        // Disable buttons
+        for(let b of allBtns) { b.disabled = true; b.style.opacity = "0.5"; }
+        
+        feedback.style.display = "block";
+        feedback.innerText = msg;
+        
+        if(isCorrect) {
+            btn.style.opacity = "1";
+            btn.classList.add('correct');
+            feedback.style.background = "#c8e6c9";
+            feedback.style.color = "#1b5e20";
+        } else {
+            btn.style.opacity = "1";
+            btn.classList.add('wrong');
+            feedback.style.background = "#ffcdd2";
+            feedback.style.color = "#b71c1c";
+        }
+    }
+</script>
+
+</body>
+</html>

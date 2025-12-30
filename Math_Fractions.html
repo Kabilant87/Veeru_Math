@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Veeru's Fraction Pizza Party</title>
+<style>
+    /* Theme: Yummy Pizza Colors (Warm Orange & Yellow) on Blue Background */
+    body { font-family: 'Comic Sans MS', 'Arial', sans-serif; background-color: #e3f2fd; color: #d84315; max-width: 800px; margin: 0 auto; padding: 20px; }
+    
+    h1 { text-align: center; color: #bf360c; text-shadow: 2px 2px #fff; font-size: 2.5em; margin-bottom: 10px; }
+    p.subtitle { text-align: center; color: #ef6c00; font-size: 1.3em; margin-bottom: 30px; font-weight: bold; }
+    
+    /* Interactive Learning Card */
+    .learn-card {
+        background: white; border: 4px solid #ffab91; border-radius: 20px;
+        padding: 25px; margin-bottom: 40px; text-align: center;
+        box-shadow: 0 8px 0 rgba(0,0,0,0.1);
+    }
+    
+    /* Pizza Animation */
+    .pizza-container {
+        position: relative; width: 200px; height: 200px; margin: 20px auto;
+        cursor: pointer;
+    }
+    .slice {
+        transition: transform 0.2s, opacity 0.2s;
+        fill: #ffcc80; stroke: #e65100; stroke-width: 2;
+    }
+    .slice:hover { fill: #ffe0b2; }
+    .slice.eaten { opacity: 0.1; }
+    
+    .status-text { font-size: 1.5em; font-weight: bold; color: #d84315; min-height: 1.5em; }
+
+    /* Question Cards */
+    .question-card { 
+        background: white; border-radius: 20px; padding: 25px; 
+        margin-bottom: 25px; border: 3px solid #90caf9;
+    }
+    
+    .q-text { font-size: 1.4em; font-weight: bold; margin-bottom: 15px; color: #1565c0; }
+    
+    /* Visual Options */
+    .visual-options { display: flex; justify-content: center; gap: 30px; margin: 20px 0; }
+    .shape-btn {
+        background: white; border: 3px solid #ddd; border-radius: 15px;
+        padding: 15px; cursor: pointer; transition: 0.2s;
+        display: flex; flex-direction: column; align-items: center;
+    }
+    .shape-btn:hover { background: #e3f2fd; border-color: #2196f3; transform: scale(1.05); }
+    .shape-btn span { margin-top: 10px; font-weight: bold; font-size: 1.1em; color: #555; }
+    
+    /* Standard Buttons */
+    .btn { 
+        padding: 12px 30px; font-size: 1.2em; border: none; 
+        background: #ff7043; color: white; border-radius: 50px; cursor: pointer; 
+        font-family: 'Comic Sans MS', sans-serif; transition: 0.2s;
+        box-shadow: 0 4px 0 #d84315;
+    }
+    .btn:active { transform: translateY(4px); box-shadow: none; }
+    .btn:hover { background: #ff5722; }
+    
+    /* Feedback */
+    .feedback { 
+        margin-top: 15px; font-size: 1.2em; font-weight: bold; 
+        text-align: center; display: none; padding: 15px; border-radius: 10px;
+    }
+    .correct { background: #c8e6c9; color: #1b5e20; border: 2px solid #2e7d32; }
+    .wrong { background: #ffcdd2; color: #b71c1c; border: 2px solid #c62828; }
+
+</style>
+</head>
+<body>
+
+<h1>🍕 Pizza Fraction Party</h1>
+<p class="subtitle">Rule #1: Fractions must be FAIR (Equal Sizes)!</p>
+
+<div class="learn-card">
+    <h2>🧪 The "Eat a Slice" Lab</h2>
+    <p>Click a slice to eat it! See what happens to the fraction.</p>
+    
+    <div class="pizza-container">
+        <svg width="200" height="200" viewBox="0 0 100 100">
+            <path id="s1" class="slice" d="M50,50 L50,0 A50,50 0 0,1 100,50 Z" onclick="eatSlice(this)" />
+            <path id="s2" class="slice" d="M50,50 L100,50 A50,50 0 0,1 50,100 Z" onclick="eatSlice(this)" />
+            <path id="s3" class="slice" d="M50,50 L50,100 A50,50 0 0,1 0,50 Z" onclick="eatSlice(this)" />
+            <path id="s4" class="slice" d="M50,50 L0,50 A50,50 0 0,1 50,0 Z" onclick="eatSlice(this)" />
+            
+            <circle cx="65" cy="35" r="3" fill="#d84315" pointer-events="none"/>
+            <circle cx="75" cy="75" r="3" fill="#d84315" pointer-events="none"/>
+            <circle cx="25" cy="65" r="3" fill="#d84315" pointer-events="none"/>
+            <circle cx="35" cy="25" r="3" fill="#d84315" pointer-events="none"/>
+        </svg>
+    </div>
+    
+    <div class="status-text" id="pizzaStatus">4 Fourths (One Whole Pizza)</div>
+    <br>
+    <button class="btn" onclick="resetPizza()" style="background:#4caf50;">Bake New Pizza 🔄</button>
+</div>
+
+<div class="question-card">
+    <div class="q-text">1. Which shape shows a "Fair Share" (Equal Parts)?</div>
+    <div class="visual-options">
+        <button class="shape-btn" onclick="check(this, false, 'That is NOT fair! The top part is tiny.')">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+                <rect x="10" y="10" width="80" height="80" fill="#ffecb3" stroke="black" stroke-width="2"/>
+                <line x1="10" y1="30" x2="90" y2="30" stroke="red" stroke-width="2"/> </svg>
+            <span>Shape A</span>
+        </button>
+        
+        <button class="shape-btn" onclick="check(this, true, 'Correct! Both sides are exactly the same size.')">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+                <rect x="10" y="10" width="80" height="80" fill="#c8e6c9" stroke="black" stroke-width="2"/>
+                <line x1="50" y1="10" x2="50" y2="90" stroke="green" stroke-width="2"/> </svg>
+            <span>Shape B</span>
+        </button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">2. Look at this circle. It has 3 equal parts. What are they called?</div>
+    <div style="text-align:center; margin-bottom:15px;">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="45" fill="white" stroke="black" stroke-width="2"/>
+            <line x1="50" y1="50" x2="50" y2="5" stroke="black" stroke-width="2"/>
+            <line x1="50" y1="50" x2="90" y2="75" stroke="black" stroke-width="2"/>
+            <line x1="50" y1="50" x2="10" y2="75" stroke="black" stroke-width="2"/>
+        </svg>
+    </div>
+    <div style="text-align:center; display:flex; gap:10px; justify-content:center;">
+        <button class="btn" onclick="check(this, false, 'Halves means 2 parts.')">Halves</button>
+        <button class="btn" onclick="check(this, true, 'Yes! 3 parts = Thirds.')">Thirds</button>
+        <button class="btn" onclick="check(this, false, 'Fourths means 4 parts.')">Fourths</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">3. Which picture shows "Three Fourths"?</div>
+    <p style="text-align:center; font-size:1em; color:#555;">(Hint: Look for 3 colored slices)</p>
+    
+    <div class="visual-options">
+        <button class="shape-btn" onclick="check(this, false, 'Count again. Only 1 slice is colored here.')">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="white" stroke="black"/>
+                <path d="M50,50 L50,10 A40,40 0 0,1 90,50 Z" fill="#29b6f6" />
+                <line x1="50" y1="10" x2="50" y2="90" stroke="black"/>
+                <line x1="10" y1="50" x2="90" y2="50" stroke="black"/>
+            </svg>
+            <span>A</span>
+        </button>
+        
+        <button class="shape-btn" onclick="check(this, true, 'Great job! 3 slices are colored out of 4.')">
+            <svg width="80" height="80" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="40" fill="#29b6f6" stroke="black"/> <path d="M50,50 L50,10 A40,40 0 0,0 10,50 Z" fill="white" /> <line x1="50" y1="10" x2="50" y2="90" stroke="black"/>
+                <line x1="10" y1="50" x2="90" y2="50" stroke="black"/>
+            </svg>
+            <span>B</span>
+        </button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<div class="question-card">
+    <div class="q-text">4. Veeru cuts a chocolate bar into 2 equal pieces. He eats 1 piece. How much did he eat?</div>
+    <div style="text-align:center; margin-bottom:15px;">
+        <svg width="120" height="60" viewBox="0 0 120 60">
+            <rect x="10" y="10" width="100" height="40" fill="#795548" stroke="black" stroke-width="2"/>
+            <line x1="60" y1="10" x2="60" y2="50" stroke="white" stroke-width="2" stroke-dasharray="4"/>
+        </svg>
+    </div>
+    <div style="text-align:center; display:flex; gap:10px; justify-content:center;">
+        <button class="btn" onclick="check(this, false, 'One Fourth is for 4 pieces.')">One Fourth</button>
+        <button class="btn" onclick="check(this, true, 'Correct! 1 out of 2 pieces is One Half.')">One Half</button>
+        <button class="btn" onclick="check(this, false, 'One Whole means he ate the entire thing!')">One Whole</button>
+    </div>
+    <div class="feedback"></div>
+</div>
+
+<script>
+    // Pizza Lab Logic
+    let slicesLeft = 4;
+    
+    function eatSlice(el) {
+        if (el.classList.contains('eaten')) return; // Already eaten
+        
+        el.classList.add('eaten');
+        slicesLeft--;
+        
+        updateStatus();
+    }
+    
+    function updateStatus() {
+        const text = document.getElementById('pizzaStatus');
+        if (slicesLeft === 4) text.innerText = "4 Fourths (One Whole Pizza)";
+        else if (slicesLeft === 3) text.innerText = "3 Fourths left (You ate 1 Fourth)";
+        else if (slicesLeft === 2) text.innerText = "2 Fourths left (That is One Half!)";
+        else if (slicesLeft === 1) text.innerText = "1 Fourth left";
+        else text.innerText = "0 left! You ate the Whole pizza!";
+    }
+    
+    function resetPizza() {
+        slicesLeft = 4;
+        document.querySelectorAll('.slice').forEach(el => el.classList.remove('eaten'));
+        updateStatus();
+    }
+
+    // Question Checking Logic
+    function check(btn, isCorrect, msg) {
+        let parent = btn.closest('.question-card'); // Find the card
+        let feedback = parent.querySelector('.feedback');
+        
+        // Disable buttons in this card
+        let allBtns = parent.querySelectorAll('button');
+        allBtns.forEach(b => {
+            b.disabled = true;
+            b.style.opacity = "0.6";
+        });
+        
+        feedback.style.display = "block";
+        feedback.innerText = msg;
+        
+        if(isCorrect) {
+            feedback.className = "feedback correct";
+            // Highlight the correct button visually
+            if(btn.classList.contains('shape-btn')) btn.style.borderColor = "green";
+            else btn.style.background = "green";
+        } else {
+            feedback.className = "feedback wrong";
+            if(btn.classList.contains('shape-btn')) btn.style.borderColor = "red";
+            else btn.style.background = "red";
+        }
+    }
+</script>
+
+</body>
+</html>
